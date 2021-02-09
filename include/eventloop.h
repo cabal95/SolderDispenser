@@ -7,13 +7,20 @@
 /**
  * Tracks and dispatches events.
  */
-class RunLoop
+class EventLoop
 {
 private:
     /**
-     * The first event in our linked list.
+     * The first source in our linked list.
      */
-    LinkedListItem<BaseEvent> *m_firstEvent = nullptr;
+    LinkedListItem *m_firstSource = nullptr;
+
+    /**
+     * Remove the item from the internal linked list.
+     *
+     * @param item The linked list item to be removed.
+     */
+    void removeEvent(LinkedListItem *item);
 
 public:
     /**
@@ -22,6 +29,13 @@ public:
      * @param event The event that will be tracked by this RunLoop.
      */
     void addEvent(BaseEvent *event);
+
+    /**
+     * Removes an existing event source from the loop.
+     *
+     * @param event The event that will no longer be tracked.
+     */
+    void removeEvent(BaseEvent *event);
 
     /**
      * Perform a single pass of the RunLoop and check all events

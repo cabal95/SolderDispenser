@@ -1,12 +1,6 @@
-/**
- * Blink
- *
- * Turns on an LED on for one second,
- * then off for one second, repeatedly.
- */
 #include <Arduino.h>
 #include <LiquidCrystal.h>
-#include "runloop.h"
+#include "eventloop.h"
 #include "timerevent.h"
 #include "button.h"
 #include "menu.h"
@@ -22,7 +16,7 @@
 #define LCD_D7 19
 
 Menu *menu;
-RunLoop runLoop;
+EventLoop mainLoop;
 int btnCount = 0;
 
 void buttonPressed(Button *button)
@@ -51,16 +45,16 @@ void setup()
     Button *btn = new Button(BTN, false);
     btn->setPressedHandler(buttonPressed);
     btn->setReleasedHandler(buttonReleased);
-    runLoop.addEvent(new TimerEvent(1000, [] {
+    mainLoop.addEvent(new TimerEvent(1000, [] {
         ledState = !ledState;
         digitalWrite(LED_BUILTIN, ledState ? HIGH : LOW);
     }));
-    runLoop.addEvent(btn);
+    mainLoop.addEvent(btn);
 }
 
 void loop()
 {
-    runLoop.runOnce();
+    mainLoop.runOnce();
 
     if (Serial.available() > 0)
     {
