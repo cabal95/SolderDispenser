@@ -5,7 +5,7 @@
  * 
  * @param event The event that will be tracked by this RunLoop.
  */
-void EventLoop::addEvent(BaseEvent *event)
+void EventLoop::addEvent(EventSource *event)
 {
     LinkedListItem *newItem = new LinkedListItem(event, nullptr, m_firstSource);
 
@@ -17,7 +17,7 @@ void EventLoop::addEvent(BaseEvent *event)
  *
  * @param event The event that will no longer be tracked.
  */
-void EventLoop::removeEvent(BaseEvent *event)
+void EventLoop::removeEvent(EventSource *event)
 {
     for (LinkedListItem *item = m_firstSource; item != nullptr; item = item->getNext())
     {
@@ -72,22 +72,12 @@ void EventLoop::runOnce()
 
     while (item != nullptr)
     {
-        BaseEvent *event = (BaseEvent *)item->getItem();
+        EventSource *event = (EventSource *)item->getItem();
 
         //
-        // Give the event source a chance to trigger itself.
+        // Process the event.
         //
-        event->checkEvent();
-
-        //
-        // If the event has been triggered then we need to execute it and
-        // also clear the trigger.
-        //
-        if (event->isTriggered())
-        {
-            event->clearTriggered();
-            event->executeEvent();
-        }
+        event->processEvent();
 
         //
         // If the event has completed then it doesn't need to run anymore.

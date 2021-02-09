@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 #include "eventloop.h"
-#include "timerevent.h"
-#include "button.h"
+#include "timereventsource.h"
+#include "buttoneventsource.h"
 #include "menu.h"
 
 #define LED_EXT 2
@@ -19,16 +19,9 @@ Menu *menu;
 EventLoop mainLoop;
 int btnCount = 0;
 
-void buttonPressed(Button *button)
-{
-    digitalWrite(LED_EXT, HIGH);
-    btnCount += 1;
-
-    Serial.println("Button Pressed");
-}
-
-void buttonReleased(Button *button);
-bool ledState = false;
+void toggleLed();
+void buttonPressed();
+void buttonReleased();
 
 void setup()
 {
@@ -42,13 +35,10 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED_EXT, OUTPUT);
 
-    Button *btn = new Button(BTN, false);
+    ButtonEventSource *btn = new ButtonEventSource(BTN, false);
     btn->setPressedHandler(buttonPressed);
     btn->setReleasedHandler(buttonReleased);
-    mainLoop.addEvent(new TimerEvent(1000, [] {
-        ledState = !ledState;
-        digitalWrite(LED_BUILTIN, ledState ? HIGH : LOW);
-    }));
+    mainLoop.addEvent(new TimerEventSource(1000, toggleLed));
     mainLoop.addEvent(btn);
 }
 
@@ -76,7 +66,21 @@ void loop()
     }
 }
 
-void buttonReleased(Button *button)
+void toggleLed()
+{
+    bool ledState = digitalRead(LED_BUILTIN) == HIGH ? LOW : HIGH;
+    digitalWrite(LED_BUILTIN, ledState);
+}
+
+void buttonPressed()
+{
+    digitalWrite(LED_EXT, HIGH);
+    btnCount += 1;
+
+    Serial.println("Button Pressed");
+}
+
+void buttonReleased()
 {
     digitalWrite(LED_EXT, LOW);
 

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "button.h"
+#include "buttoneventsource.h"
 
 /**
  * Initializes a new instance of the class.
@@ -10,7 +10,7 @@
  * button press, otherwise the pin going low will count as a
  * button press.
  */
-Button::Button(int pin, uint16_t interval, bool highIsPressed)
+ButtonEventSource::ButtonEventSource(int pin, uint16_t interval, bool highIsPressed)
 {
     m_pin = pin;
     m_debounceInterval = interval;
@@ -31,7 +31,7 @@ Button::Button(int pin, uint16_t interval, bool highIsPressed)
  * 
  * @param handler The handler to be called.
  */
-void Button::setPressedHandler(void (*handler)(Button *))
+void ButtonEventSource::setPressedHandler(void (*handler)())
 {
     m_pressedHandler = handler;
 }
@@ -41,7 +41,7 @@ void Button::setPressedHandler(void (*handler)(Button *))
  * 
  * @param handler The handler to be called.
  */
-void Button::setReleasedHandler(void (*handler)(Button *))
+void ButtonEventSource::setReleasedHandler(void (*handler)())
 {
     m_releasedHandler = handler;
 }
@@ -50,7 +50,7 @@ void Button::setReleasedHandler(void (*handler)(Button *))
  * Runs logic to determine if the event should be triggered. Overrides
  * should internally call setTriggered() if to trigger the event.
  */
-void Button::checkEvent()
+void ButtonEventSource::checkEvent()
 {
     uint64_t current_millis = millis();
 
@@ -71,14 +71,14 @@ void Button::checkEvent()
 /**
  * Executes the user-level event processing code.
  */
-void Button::executeEvent()
+void ButtonEventSource::executeEvent()
 {
     if (m_currentState && m_pressedHandler != NULL)
     {
-        m_pressedHandler(this);
+        m_pressedHandler();
     }
     else if (!m_currentState && m_releasedHandler != NULL)
     {
-        m_releasedHandler(this);
+        m_releasedHandler();
     }
 }

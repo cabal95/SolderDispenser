@@ -1,14 +1,14 @@
-#include "baseevent.h"
+#include "triggeredeventsource.h"
 #include <stddef.h>
 #include <stdint.h>
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef BUTTONEVENTSOURCE_H
+#define BUTTONEVENTSOURCE_H
 
 /**
  * A button event that triggers when a pin state changes.
  */
-class Button : public BaseEvent
+class ButtonEventSource : public TriggeredEventSource
 {
 private:
     /**
@@ -41,22 +41,23 @@ private:
     /**
      * The handler that will be called when the button is pressed.
      */
-    void (*m_pressedHandler)(Button *) = NULL;
+    void (*m_pressedHandler)() = NULL;
 
     /**
      * The handler that will be called when the button is released.
      */
-    void (*m_releasedHandler)(Button *) = NULL;
+    void (*m_releasedHandler)() = NULL;
 
 protected:
+
 public:
     /**
      * Initializes a new instance of the class.
      * 
      * @param pin The pin number that will be used for the button.
      */
-    Button(int pin)
-        : Button(pin, true) {}
+    ButtonEventSource(int pin)
+        : ButtonEventSource(pin, true) {}
 
     /**
      * Initializes a new instance of the class.
@@ -66,8 +67,8 @@ public:
      * button press, otherwise the pin going low will count as a
      * button press.
      */
-    Button(int pin, bool highIsPressed)
-        : Button(pin, 25, highIsPressed) {}
+    ButtonEventSource(int pin, bool highIsPressed)
+        : ButtonEventSource(pin, 25, highIsPressed) {}
 
     /**
      * Initializes a new instance of the class.
@@ -75,8 +76,8 @@ public:
      * @param pin The pin number that will be used for the button.
      * @param interval The number of milliseconds for the debounce delay.
      */
-    Button(int pin, uint16_t interval)
-        : Button(pin, 25, true) {}
+    ButtonEventSource(int pin, uint16_t interval)
+        : ButtonEventSource(pin, 25, true) {}
 
     /**
      * Initializes a new instance of the class.
@@ -87,21 +88,21 @@ public:
      * button press, otherwise the pin going low will count as a
      * button press.
      */
-    Button(int pin, uint16_t interval, bool highIsPressed);
+    ButtonEventSource(int pin, uint16_t interval, bool highIsPressed);
 
     /**
      * Sets the handler to be called when the button is pressed.
      * 
      * @param handler The handler to be called.
      */
-    void setPressedHandler(void (*handler)(Button *));
+    void setPressedHandler(void (*handler)());
 
     /**
      * Sets the handler to be called when the button is released.
      * 
      * @param handler The handler to be called.
      */
-    void setReleasedHandler(void (*handler)(Button *));
+    void setReleasedHandler(void (*handler)());
 
     /**
      * Runs logic to determine if the event should be triggered. Overrides

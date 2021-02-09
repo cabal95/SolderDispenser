@@ -1,8 +1,8 @@
-#include "baseevent.h"
+#include "eventsource.h"
 #include "linkedlistitem.h"
 
-#ifndef RUNLOOP_H
-#define RUNLOOP_H
+#ifndef EVENTLOOP_H
+#define EVENTLOOP_H
 
 /**
  * Tracks and dispatches events.
@@ -28,14 +28,14 @@ public:
      * 
      * @param event The event that will be tracked by this RunLoop.
      */
-    void addEvent(BaseEvent *event);
+    void addEvent(EventSource *event);
 
     /**
      * Removes an existing event source from the loop.
      *
      * @param event The event that will no longer be tracked.
      */
-    void removeEvent(BaseEvent *event);
+    void removeEvent(EventSource *event);
 
     /**
      * Perform a single pass of the RunLoop and check all events

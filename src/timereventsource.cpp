@@ -1,4 +1,4 @@
-#include "timerevent.h"
+#include "timereventsource.h"
 #include <Arduino.h>
 
 /**
@@ -7,7 +7,7 @@
  * @param interval The number of milliseconds between timer executions.
  * @param callback The function to call when the timer executes.
  */
-TimerEvent::TimerEvent(uint32_t interval, void (*callback)())
+TimerEventSource::TimerEventSource(uint32_t interval, void (*callback)())
 {
     m_interval = interval;
     m_callback = callback;
@@ -17,7 +17,7 @@ TimerEvent::TimerEvent(uint32_t interval, void (*callback)())
  * Runs logic to determine if the event should be triggered. Overrides
  * should internally call setTriggered() if to trigger the event.
  */
-void TimerEvent::checkEvent()
+void TimerEventSource::checkEvent()
 {
     if (millis() - m_lastTriggerTime >= m_interval)
     {
@@ -29,7 +29,7 @@ void TimerEvent::checkEvent()
 /**
  * Executes the user-level event processing code.
  */
-void TimerEvent::executeEvent()
+void TimerEventSource::executeEvent()
 {
     if (m_callback != nullptr)
     {

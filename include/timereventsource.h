@@ -1,13 +1,13 @@
-#include "baseevent.h"
+#include "triggeredeventsource.h"
 #include <stdint.h>
 
-#ifndef TIMEREVENT_H
-#define TIMEREVENT_H
+#ifndef TIMEREVENTSOURCE_H
+#define TIMEREVENTSOURCE_H
 
 /**
  * An event that executes on a set interval in milliseconds.
  */
-class TimerEvent : public BaseEvent
+class TimerEventSource : public TriggeredEventSource
 {
 private:
     /**
@@ -32,7 +32,7 @@ public:
      * @param interval The number of milliseconds between timer executions.
      * @param callback The function to call when the timer executes.
      */
-    TimerEvent(uint32_t interval, void (*callback)());
+    TimerEventSource(uint32_t interval, void (*callback)());
 
     /**
      * Runs logic to determine if the event should be triggered. Overrides
@@ -43,7 +43,7 @@ public:
     /**
      * Executes the user-level event processing code.
      */
-    void executeEvent();
+    void executeEvent() override;
 };
 
 #endif
