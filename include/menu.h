@@ -108,11 +108,11 @@ private:
 
 public:
     /**
-     * Creates a new instance of the Menu.
+     * Initializes the menu for use.
      * 
      * @param lcd The LCD object to display information on.
      */
-    Menu(LiquidCrystal *lcd);
+    void init(LiquidCrystal *lcd);
 
     /**
      * Gets the current DispenserMode to operate in.

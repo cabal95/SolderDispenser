@@ -7,11 +7,11 @@
 const char *SettingsModes[4] = { "Cancel", "Load", "Save", "Init" };
 
 /**
- * Creates a new instance of the Menu.
+ * Initializes the menu for use.
  * 
  * @param lcd The LCD object to display information on.
  */
-Menu::Menu(LiquidCrystal *lcd)
+void Menu::init(LiquidCrystal *lcd)
 {
     m_lcd = lcd;
 

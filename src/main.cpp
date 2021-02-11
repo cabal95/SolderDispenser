@@ -1,12 +1,20 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+#include <DRV8825.h>
 #include "eventloop.h"
 #include "timereventsource.h"
 #include "buttoneventsource.h"
 #include "menu.h"
 
-#define LED_EXT 2
-#define BTN 3
+#define MOTOR_MICROSTEP 4L
+#define MOTOR_STEP_COUNT (200L * MOTOR_MICROSTEP)
+
+#define BTN_RUN 2
+#define BTN_UP 3
+#define BTN_DOWN 4
+#define BTN_SELECT 5
+#define MOTOR_DIR 6
+#define MOTOR_STEP 7
 
 #define LCD_RS 14
 #define LCD_EN 15
@@ -15,35 +23,33 @@
 #define LCD_D6 18
 #define LCD_D7 19
 
-Menu *menu;
 EventLoop mainLoop;
-int btnCount = 0;
+LiquidCrystal lcd = LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+Menu menu;
+DRV8825 stepper = DRV8825(200, MOTOR_DIR, MOTOR_STEP);
 
 void toggleLed();
-void buttonPressed();
-void buttonReleased();
+void btnRunPressed();
+void btnRunReleased();
 
 void setup()
 {
     Serial.begin(9600);
 
-    LiquidCrystal *lcd = new LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
-    lcd->begin(16, 2);
-    menu = new Menu(lcd);
+    stepper.begin(1, MOTOR_MICROSTEP);
 
-    // initialize LED digital pin as an output.
-    pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(LED_EXT, OUTPUT);
+    lcd.begin(16, 2);
+    menu.init(&lcd);
 
-    ButtonEventSource *btn = new ButtonEventSource(BTN, false);
-    btn->setPressedHandler(buttonPressed);
-    btn->setReleasedHandler(buttonReleased);
-    mainLoop.addEvent(new TimerEventSource(1000, toggleLed));
-    mainLoop.addEvent(btn);
+    ButtonEventSource *btnRun = new ButtonEventSource(BTN_RUN, false);
+    btnRun->setPressedHandler(btnRunPressed);
+    btnRun->setReleasedHandler(btnRunReleased);
+    mainLoop.addEvent(btnRun);
 }
 
 void loop()
 {
+    stepper.nextAction();
     mainLoop.runOnce();
 
     if (Serial.available() > 0)
@@ -52,37 +58,52 @@ void loop()
 
         if (c == 'u')
         {
-            menu->keyUp();
+            menu.keyUp();
             Serial.println("Up");
         }
         else if (c == 'd')
         {
-            menu->keyDown();
+            menu.keyDown();
         }
         else if (c == 's')
         {
-            menu->keySelect();
+            menu.keySelect();
         }
     }
 }
 
-void toggleLed()
+void btnRunPressed()
 {
-    bool ledState = digitalRead(LED_BUILTIN) == HIGH ? LOW : HIGH;
-    digitalWrite(LED_BUILTIN, ledState);
+    if (menu.getMode() == DispenserMode::Step)
+    {
+        int steps = menu.getStepSize();
+
+        if (menu.getDirection() == DispenserDirection::Backward)
+        {
+            steps = -steps;
+        }
+
+        stepper.setRPM(60);
+        stepper.startMove(steps);
+    }
+    else
+    {
+        long steps = 100 * MOTOR_STEP_COUNT;
+
+        if (menu.getDirection() == DispenserDirection::Backward)
+        {
+            steps = -steps;
+        }
+
+        stepper.setRPM(menu.getDriveSpeed() / (float)MOTOR_STEP_COUNT * 60.0);
+        stepper.startMove(steps);
+    }
 }
 
-void buttonPressed()
+void btnRunReleased()
 {
-    digitalWrite(LED_EXT, HIGH);
-    btnCount += 1;
-
-    Serial.println("Button Pressed");
-}
-
-void buttonReleased()
-{
-    digitalWrite(LED_EXT, LOW);
-
-    Serial.println("Button Released");
+    if (menu.getMode() == DispenserMode::Drive)
+    {
+        stepper.stop();
+    }
 }
