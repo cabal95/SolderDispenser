@@ -35,7 +35,7 @@ void setup()
 
     Wire.begin();
     ssd.begin();
-    ssd.setFont(Font8x10, 8, 10);
+    ssd.setFont(Font8x16, 8, 16);
 
     stepper.begin(1, MOTOR_MICROSTEP);
 
