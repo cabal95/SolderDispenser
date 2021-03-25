@@ -27,7 +27,7 @@ enum SsdCommand
     SetDisplayClockDivide = 0xD5,
     SetPreCharge = 0xD9,
     SetComPins = 0xDA,
-    SetVComDetect = 0xDB,
+    SetVComDeselect = 0xDB,
 };
 
 enum SsdVcc
@@ -58,7 +58,7 @@ Ssd1306::Ssd1306(TwoWire *wire, uint8_t address)
  */
 void Ssd1306::begin()
 {
-    m_contrast = 0x8F;
+    m_contrast = 0x7F;
 
     m_wire->setClock(400000);
 
@@ -82,9 +82,9 @@ void Ssd1306::begin()
         SsdCommand::SetContrast,
         m_contrast,
         SsdCommand::SetPreCharge,
-        0xF1,
-        SsdCommand::SetVComDetect,
-        0x40,
+        0x22,
+        SsdCommand::SetVComDeselect,
+        0x20,
         SsdCommand::DisplayAllOnResume,
         SsdCommand::NormalDisplay,
         SsdCommand::DeactivateScroll};
@@ -160,9 +160,18 @@ void Ssd1306::dimDisplay(bool dim)
 {
     m_wire->setClock(400000);
 
-    uint8_t cmds[2] = {SsdCommand::SetContrast, dim ? (uint8_t)0 : m_contrast};
+    if (dim)
+    {
+        uint8_t cmds[] = {SsdCommand::SetContrast, 0, SsdCommand::SetPreCharge, 0x00};
 
-    commandList(cmds, sizeof(cmds));
+        commandList(cmds, sizeof(cmds));
+    }
+    else
+    {
+        uint8_t cmds[] = {SsdCommand::SetContrast, m_contrast, SsdCommand::SetPreCharge, 0x22};
+
+        commandList(cmds, sizeof(cmds));
+    }
 
     m_wire->setClock(100000);
 }
