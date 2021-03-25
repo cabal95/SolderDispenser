@@ -27,6 +27,7 @@ void btnRunPressed();
 void btnRunReleased();
 void btnUpPressed();
 void btnDownPressed();
+void btnSelectPressed();
 
 void setup()
 {
@@ -52,6 +53,10 @@ void setup()
     ButtonEventSource *btnDown = new ButtonEventSource(BTN_DOWN, false);
     btnDown->setPressedHandler(btnDownPressed);
     mainLoop.addEvent(btnDown);
+
+    ButtonEventSource *btnSelect = new ButtonEventSource(BTN_SELECT, false);
+    btnSelect->setPressedHandler(btnSelectPressed);
+    mainLoop.addEvent(btnSelect);
 }
 
 void loop()
@@ -123,4 +128,9 @@ void btnUpPressed()
 void btnDownPressed()
 {
     menu.keyDown();
+}
+
+void btnSelectPressed()
+{
+    menu.keySelect();
 }
