@@ -11,12 +11,12 @@ const char *SettingsModes[4] = { "Cancel", "Load", "Save", "Init" };
  * 
  * @param lcd The LCD object to display information on.
  */
-void Menu::init(LiquidCrystal *lcd)
+void Menu::init(Ssd1306 *lcd)
 {
     m_lcd = lcd;
 
-    m_lcd->blink();
     m_lcd->clear();
+    m_lcd->display();
 
     loadValues();
     updateDisplay();
@@ -65,6 +65,7 @@ void Menu::saveValues()
 void Menu::updateDisplay()
 {
     m_lcd->clear();
+    m_lcd->setCursor(0, 0);
 
     if (m_currentMenu == 1)
     {
@@ -88,13 +89,13 @@ void Menu::updateDisplay()
     {
         m_lcd->print("4. Step Size");
         m_lcd->setCursor(0, 1);
-        m_lcd->print(m_stepSize);
+        m_lcd->print(String(m_stepSize));
     }
     else if (m_currentMenu == 5)
     {
         m_lcd->print("5. Drive Speed");
         m_lcd->setCursor(0, 1);
-        m_lcd->print(m_driveSpeed);
+        m_lcd->print(String(m_driveSpeed));
     }
 
     if (m_isEditing)
@@ -105,6 +106,8 @@ void Menu::updateDisplay()
     {
         m_lcd->setCursor(0, 0);
     }
+
+    m_lcd->display();
 }
 
 /**

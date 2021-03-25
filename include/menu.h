@@ -1,7 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <LiquidCrystal.h>
+#include "ssd1306.h"
 
 /**
  * The mode the dispenser motor should operate in.
@@ -48,7 +48,7 @@ private:
     /**
      * The LCD display to use when interacting with the user.
      */
-    LiquidCrystal *m_lcd;
+    Ssd1306 *m_lcd;
 
     /**
      * The current menu item being displayed.
@@ -112,7 +112,7 @@ public:
      * 
      * @param lcd The LCD object to display information on.
      */
-    void init(LiquidCrystal *lcd);
+    void init(Ssd1306 *lcd);
 
     /**
      * Gets the current DispenserMode to operate in.
