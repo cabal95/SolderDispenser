@@ -1,0 +1,13 @@
+Part,Manufacturer,Part Number,Description,Quantity,Unit Price,Link
+U1,Microchip Technology,ATMEGA328-PU,Micro controller,1,$2.30,https://www.digikey.com/en/products/detail/microchip-technology/ATMEGA328-PU/2271026
+RV1,Amphenol Piher Sensing Systems,PT10LV10-103A2020-PM-S,10K potentiometer,1,$0.46,https://www.digikey.com/en/products/detail/amphenol-piher-sensing-systems/PT10LV10-103A2020-PM-S/9555919
+U3,Newhaven Display Intl,NHD-0216K1Z-NSW-BBW-L,16x2 LCD character display,1,$12.43,https://www.digikey.com/en/products/detail/newhaven-display-intl/NHD-0216K1Z-NSW-BBW-L/1701179
+U2,Traco Power,TSR 1-2450E,24v to 5v switching regulator,1,$5.81,https://www.digikey.com/en/products/detail/traco-power/TSR-1-2450E/12171283
+C1,Nichicon,UVR1V101MED1TD,100uF 20% 35V Radial Capacitor,1,$0.30,https://www.digikey.com/en/products/detail/nichicon/UVR1V101MED1TD/3438492
+R1,Yageo,CFR-25JB-52-10K,10K resistor,1,$0.10,https://www.digikey.com/en/products/detail/yageo/CFR-25JB-52-10K/338
+"C2,C3",Vishay Beyschlag,S220K25SL0N63L6R,22pF ceramic disc capacitor 1kV,2,$0.36,https://www.digikey.com/en/products/detail/vishay-beyschlag-draloric-bc-components/S220K25SL0N63L6R/2356806
+C5,Vishay Beyschlag,K104Z15Y5VF53L2,0.1uF 50V ceramic disc capacitor Y5V,1,$0.28,https://www.digikey.com/en/products/detail/vishay-beyschlag-draloric-bc-components/K104Z15Y5VF53L2/2820543
+Y1,ECS Inc.,ECS-160-S-4,16MHz crystal oscillator,1,$0.69,https://www.digikey.com/en/products/detail/ecs-inc/ECS-160-S-4/79348
+J4,Switchcraft Inc.,RAPC712BKZ,"DC barrel jack, 5.5mm x 2.5mm 100VDC@5A",1,$2.01,https://www.digikey.com/en/products/detail/switchcraft-inc/RAPC712BKZ/9997462
+C4,Nichicon,USR1H100MDD,10uF 20% 50V Radial Capacitor,1,$0.27,https://www.digikey.com/en/products/detail/nichicon/USR1H100MDD/2539219
+"SW1,SW2,SW3,SW4",TE Connectivity,1825910-6,6x6mm round cap tactile switch,4,$0.10,https://www.digikey.com/en/products/detail/te-connectivity-alcoswitch-switches/1825910-6/1632536
