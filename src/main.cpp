@@ -10,12 +10,16 @@
 #define MOTOR_MICROSTEP 4L
 #define MOTOR_STEP_COUNT (200L * MOTOR_MICROSTEP)
 
-#define BTN_RUN 2
-#define BTN_UP 3
-#define BTN_DOWN 4
-#define BTN_SELECT 5
-#define MOTOR_DIR 6
-#define MOTOR_STEP 7
+#define BTN_RUN 8 /* Pin 14 */
+#define BTN_SELECT 9 /* Pin 15 */
+#define BTN_UP 14 /* Pin 23 */
+#define BTN_DOWN 15 /* Pin 24 */
+#define MOTOR_DIR 2 /* Pin 4 */
+#define MOTOR_STEP 3 /* Pin 5 */
+#define MOTOR_MS0 4 /* Pin 6 */
+#define MOTOR_EN 6 /* Pin 11 */
+#define MOTOR_MS1 7 /* Pin 12 */
+#define MOTOR_MS2 8 /* Pin 13 */
 
 EventLoop mainLoop;
 Ssd1306 ssd = Ssd1306(&Wire, 0x3c);
@@ -57,6 +61,8 @@ void setup()
     ButtonEventSource *btnSelect = new ButtonEventSource(BTN_SELECT, false);
     btnSelect->setPressedHandler(btnSelectPressed);
     mainLoop.addEvent(btnSelect);
+
+    ssd.dimDisplay(true);
 }
 
 void loop()

@@ -1,5 +1,6 @@
 #include "ssd1306.h"
 
+#define BUFFER_LENGTH 32
 #define WIRE_MAX min(256, BUFFER_LENGTH)
 
 enum SsdCommand
